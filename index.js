@@ -71,6 +71,8 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
+
+    /*
     const nameExists = persons.some(person => person.name === body.name)
 
     if (!body.name) {
@@ -86,15 +88,16 @@ app.post('/api/persons', (request, response) => {
             error: 'Name must be unique.'
         })
     }
+    */
 
-    const person = {
-        id: generateId(),
+    const person = new Person({
         name: body.name,
         number: body.number
-    }
+    })
 
-    persons = persons.concat(person)
-    response.json(person)
+    person.save().then(addedPerson => {
+        response.json(addedPerson)
+    })
 })
 
 const PORT = process.env.PORT
